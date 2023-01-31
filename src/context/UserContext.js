@@ -1,7 +1,7 @@
-const { createContext, useState } = require('react');
+const { createContext, useState, useContext } = require('react');
 const { getUser } = require('../services/auth.js');
 
-// user provider created here
+// user provider created down here
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
@@ -11,4 +11,13 @@ const UserProvider = ({ children }) => {
   return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };
 
-export { UserProvider, UserContext };
+const useUser = () => {
+  const data = useContext(UserContext);
+
+  if (!data) {
+    throw new Error('useUser must be wrapped in a UserProvider');
+  }
+  return data;
+};
+
+export { UserProvider, useUser };
